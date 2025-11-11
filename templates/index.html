@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automation Test Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .tabs {
+            display: flex;
+            background: #f5f5f5;
+            border-bottom: 2px solid #ddd;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            background: #f5f5f5;
+            border: none;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .tab:hover {
+            background: #e0e0e0;
+        }
+        
+        .tab.active {
+            background: white;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 30px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        button.secondary {
+            background: #6c757d;
+        }
+        
+        button.success {
+            background: #28a745;
+        }
+        
+        button.danger {
+            background: #dc3545;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-weight: 600;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .test-list {
+            list-style: none;
+        }
+        
+        .test-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid #667eea;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .test-item-info h3 {
+            margin-bottom: 5px;
+            color: #333;
+        }
+        
+        .test-item-info p {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .test-item-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .test-item-actions button {
+            padding: 8px 15px;
+            font-size: 0.9em;
+        }
+        
+        .result-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid #28a745;
+        }
+        
+        .result-item.failed {
+            border-left-color: #dc3545;
+        }
+        
+        .result-item.error {
+            border-left-color: #ffc107;
+        }
+        
+        .result-details {
+            margin-top: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+        
+        .action-result {
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 0.85em;
+        }
+        
+        .action-result.success {
+            background: #d4edda;
+            border-left: 3px solid #28a745;
+        }
+        
+        .action-result.failed {
+            background: #f8d7da;
+            border-left: 3px solid #dc3545;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
+        .empty-state i {
+            font-size: 3em;
+            margin-bottom: 10px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 Automation Test Tool</h1>
+            <p>Record, manage, and execute your end-to-end test cases</p>
+        </header>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('record')">Record Test</button>
+            <button class="tab" onclick="switchTab('tests')">Test Cases</button>
+            <button class="tab" onclick="switchTab('execute')">Execute Tests</button>
+            <button class="tab" onclick="switchTab('results')">Test Results</button>
+        </div>
+        
+        <!-- Record Tab -->
+        <div id="record" class="tab-content active">
+            <h2>Record New Test Case</h2>
+            
+            <div class="form-group">
+                <label for="testName">Test Name:</label>
+                <input type="text" id="testName" placeholder="e.g., Login Test">
+            </div>
+            
+            <div class="form-group">
+                <label for="startUrl">Start URL:</label>
+                <input type="text" id="startUrl" placeholder="https://example.com" value="https://example.com">
+            </div>
+            
+            <button onclick="startRecording()">Start Recording</button>
+            
+            <div id="recordingControls" style="display: none;">
+                <h3 style="margin-top: 30px;">Recording Actions</h3>
+                
+                <div class="form-group">
+                    <label>Action Type:</label>
+                    <select id="actionType" onchange="updateActionForm()">
+                        <option value="click">Click Element</option>
+                        <option value="input">Input Text</option>
+                        <option value="wait">Wait</option>
+                        <option value="assertion">Assertion</option>
+                    </select>
+                </div>
+                
+                <div id="clickForm">
+                    <div class="form-group">
+                        <label for="clickSelector">Element Selector:</label>
+                        <input type="text" id="clickSelector" placeholder="#button-id or .button-class">
+                    </div>
+                    <div class="form-group">
+                        <label for="clickSelectorType">Selector Type:</label>
+                        <select id="clickSelectorType">
+                            <option value="css">CSS</option>
+                            <option value="xpath">XPath</option>
+                            <option value="id">ID</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div id="inputForm" style="display: none;">
+                    <div class="form-group">
+                        <label for="inputSelector">Element Selector:</label>
+                        <input type="text" id="inputSelector" placeholder="#input-id">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputValue">Value to Input:</label>
+                        <input type="text" id="inputValue" placeholder="Test value">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputSelectorType">Selector Type:</label>
+                        <select id="inputSelectorType">
+                            <option value="css">CSS</option>
+                            <option value="xpath">XPath</option>
+                            <option value="id">ID</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div id="waitForm" style="display: none;">
+                    <div class="form-group">
+                        <label for="waitSeconds">Wait Duration (seconds):</label>
+                        <input type="number" id="waitSeconds" value="2" min="1">
+                    </div>
+                </div>
+                
+                <div id="assertionForm" style="display: none;">
+                    <div class="form-group">
+                        <label for="assertionType">Assertion Type:</label>
+                        <select id="assertionType">
+                            <option value="text">Text Content</option>
+                            <option value="value">Input Value</option>
+                            <option value="visible">Element Visible</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="assertionSelector">Element Selector:</label>
+                        <input type="text" id="assertionSelector" placeholder="#element-id">
+                    </div>
+                    <div class="form-group">
+                        <label for="assertionExpected">Expected Value (optional):</label>
+                        <input type="text" id="assertionExpected" placeholder="Expected text or value">
+                    </div>
+                    <div class="form-group">
+                        <label for="assertionSelectorType">Selector Type:</label>
+                        <select id="assertionSelectorType">
+                            <option value="css">CSS</option>
+                            <option value="xpath">XPath</option>
+                            <option value="id">ID</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="success" onclick="recordAction()">Record Action</button>
+                    <button class="danger" onclick="stopRecording()">Stop & Save Recording</button>
+                </div>
+            </div>
+            
+            <div id="recordStatus"></div>
+        </div>
+        
+        <!-- Test Cases Tab -->
+        <div id="tests" class="tab-content">
+            <h2>Test Cases</h2>
+            <button onclick="loadTestCases()">Refresh List</button>
+            <ul id="testCasesList" class="test-list"></ul>
+        </div>
+        
+        <!-- Execute Tab -->
+        <div id="execute" class="tab-content">
+            <h2>Execute Tests</h2>
+            <button onclick="loadTestCasesForExecution()">Load Test Cases</button>
+            <div id="executeList"></div>
+            <button class="success" onclick="executeSuite()" style="margin-top: 20px;">Execute Selected Tests</button>
+            <div id="executeStatus"></div>
+        </div>
+        
+        <!-- Results Tab -->
+        <div id="results" class="tab-content">
+            <h2>Test Results</h2>
+            <button onclick="loadTestResults()">Refresh Results</button>
+            <div id="testResultsList"></div>
+        </div>
+    </div>
+    
+    <script>
+        let recordingActive = false;
+        let selectedTests = new Set();
+        
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+            
+            // Load data for specific tabs
+            if (tabName === 'tests') {
+                loadTestCases();
+            } else if (tabName === 'results') {
+                loadTestResults();
+            }
+        }
+        
+        function updateActionForm() {
+            const actionType = document.getElementById('actionType').value;
+            
+            document.getElementById('clickForm').style.display = 'none';
+            document.getElementById('inputForm').style.display = 'none';
+            document.getElementById('waitForm').style.display = 'none';
+            document.getElementById('assertionForm').style.display = 'none';
+            
+            if (actionType === 'click') {
+                document.getElementById('clickForm').style.display = 'block';
+            } else if (actionType === 'input') {
+                document.getElementById('inputForm').style.display = 'block';
+            } else if (actionType === 'wait') {
+                document.getElementById('waitForm').style.display = 'block';
+            } else if (actionType === 'assertion') {
+                document.getElementById('assertionForm').style.display = 'block';
+            }
+        }
+        
+        async function startRecording() {
+            const testName = document.getElementById('testName').value;
+            const startUrl = document.getElementById('startUrl').value;
+            
+            if (!testName || !startUrl) {
+                showStatus('recordStatus', 'Please fill in all fields', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/start-recording', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ test_name: testName, start_url: startUrl })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    recordingActive = true;
+                    document.getElementById('recordingControls').style.display = 'block';
+                    showStatus('recordStatus', 'Recording started! Add actions below.', 'success');
+                } else {
+                    showStatus('recordStatus', 'Error: ' + data.error, 'error');
+                }
+            } catch (error) {
+                showStatus('recordStatus', 'Error: ' + error.message, 'error');
+            }
+        }
+        
+        async function recordAction() {
+            if (!recordingActive) {
+                showStatus('recordStatus', 'Not currently recording', 'error');
+                return;
+            }
+            
+            const actionType = document.getElementById('actionType').value;
+            let data = { action_type: actionType };
+            
+            if (actionType === 'click') {
+                data.selector = document.getElementById('clickSelector').value;
+                data.selector_type = document.getElementById('clickSelectorType').value;
+            } else if (actionType === 'input') {
+                data.selector = document.getElementById('inputSelector').value;
+                data.value = document.getElementById('inputValue').value;
+                data.selector_type = document.getElementById('inputSelectorType').value;
+            } else if (actionType === 'wait') {
+                data.seconds = parseInt(document.getElementById('waitSeconds').value);
+            } else if (actionType === 'assertion') {
+                data.assertion_type = document.getElementById('assertionType').value;
+                data.selector = document.getElementById('assertionSelector').value;
+                data.expected_value = document.getElementById('assertionExpected').value;
+                data.selector_type = document.getElementById('assertionSelectorType').value;
+            }
+            
+            try {
+                const response = await fetch('/api/record-action', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showStatus('recordStatus', 'Action recorded: ' + actionType, 'success');
+                } else {
+                    showStatus('recordStatus', 'Error: ' + result.error, 'error');
+                }
+            } catch (error) {
+                showStatus('recordStatus', 'Error: ' + error.message, 'error');
+            }
+        }
+        
+        async function stopRecording() {
+            if (!recordingActive) {
+                showStatus('recordStatus', 'Not currently recording', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/stop-recording', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    recordingActive = false;
+                    document.getElementById('recordingControls').style.display = 'none';
+                    showStatus('recordStatus', 'Recording saved successfully! File: ' + data.filepath, 'success');
+                    
+                    // Clear form
+                    document.getElementById('testName').value = '';
+                } else {
+                    showStatus('recordStatus', 'Error: ' + data.error, 'error');
+                }
+            } catch (error) {
+                showStatus('recordStatus', 'Error: ' + error.message, 'error');
+            }
+        }
+        
+        async function loadTestCases() {
+            try {
+                const response = await fetch('/api/test-cases');
+                const data = await response.json();
+                
+                const list = document.getElementById('testCasesList');
+                
+                if (data.test_cases.length === 0) {
+                    list.innerHTML = '<div class="empty-state"><i>📋</i><p>No test cases yet. Record one in the Record Test tab!</p></div>';
+                    return;
+                }
+                
+                list.innerHTML = data.test_cases.map(tc => `
+                    <li class="test-item">
+                        <div class="test-item-info">
+                            <h3>${tc.name}</h3>
+                            <p>URL: ${tc.start_url} | Actions: ${tc.actions_count} | Created: ${new Date(tc.created_at).toLocaleString()}</p>
+                        </div>
+                        <div class="test-item-actions">
+                            <button onclick="viewTestCase('${tc.filename}')">View</button>
+                            <button class="success" onclick="executeTest('${tc.filepath}')">Execute</button>
+                        </div>
+                    </li>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading test cases:', error);
+            }
+        }
+        
+        async function viewTestCase(filename) {
+            try {
+                const response = await fetch(`/api/test-case/${filename}`);
+                const data = await response.json();
+                
+                alert('Test Case: ' + data.test_case.name + '\n\n' + 
+                      'Actions: ' + data.test_case.actions.length + '\n' +
+                      JSON.stringify(data.test_case.actions, null, 2));
+            } catch (error) {
+                alert('Error viewing test case: ' + error.message);
+            }
+        }
+        
+        async function executeTest(filepath) {
+            showStatus('recordStatus', 'Executing test...', 'info');
+            
+            try {
+                const response = await fetch('/api/execute-test', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ test_case_path: filepath })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    const result = data.result;
+                    alert('Test Execution Complete!\n\n' +
+                          'Status: ' + result.status.toUpperCase() + '\n' +
+                          'Duration: ' + result.duration_seconds + ' seconds\n' +
+                          'Actions: ' + result.actions_executed.length);
+                    
+                    // Switch to results tab
+                    switchTab('results');
+                    loadTestResults();
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+        
+        async function loadTestCasesForExecution() {
+            try {
+                const response = await fetch('/api/test-cases');
+                const data = await response.json();
+                
+                const list = document.getElementById('executeList');
+                
+                if (data.test_cases.length === 0) {
+                    list.innerHTML = '<div class="empty-state"><i>📋</i><p>No test cases available</p></div>';
+                    return;
+                }
+                
+                list.innerHTML = '<h3>Select tests to execute:</h3>' +
+                    data.test_cases.map(tc => `
+                        <div style="padding: 10px; margin: 5px 0; background: #f8f9fa; border-radius: 5px;">
+                            <label>
+                                <input type="checkbox" value="${tc.filepath}" onchange="toggleTest('${tc.filepath}')">
+                                ${tc.name} (${tc.actions_count} actions)
+                            </label>
+                        </div>
+                    `).join('');
+            } catch (error) {
+                console.error('Error loading test cases:', error);
+            }
+        }
+        
+        function toggleTest(filepath) {
+            if (selectedTests.has(filepath)) {
+                selectedTests.delete(filepath);
+            } else {
+                selectedTests.add(filepath);
+            }
+        }
+        
+        async function executeSuite() {
+            if (selectedTests.size === 0) {
+                showStatus('executeStatus', 'Please select at least one test', 'error');
+                return;
+            }
+            
+            showStatus('executeStatus', 'Executing test suite...', 'info');
+            
+            try {
+                const response = await fetch('/api/execute-suite', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ test_case_paths: Array.from(selectedTests) })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    const result = data.result;
+                    showStatus('executeStatus', 
+                        `Suite Complete! Passed: ${result.passed}, Failed: ${result.failed}, Errors: ${result.errors}`, 
+                        result.failed === 0 && result.errors === 0 ? 'success' : 'error');
+                    
+                    // Switch to results tab
+                    setTimeout(() => {
+                        switchTab('results');
+                        loadTestResults();
+                    }, 2000);
+                } else {
+                    showStatus('executeStatus', 'Error: ' + data.error, 'error');
+                }
+            } catch (error) {
+                showStatus('executeStatus', 'Error: ' + error.message, 'error');
+            }
+        }
+        
+        async function loadTestResults() {
+            try {
+                const response = await fetch('/api/test-results');
+                const data = await response.json();
+                
+                const list = document.getElementById('testResultsList');
+                
+                if (data.test_results.length === 0) {
+                    list.innerHTML = '<div class="empty-state"><i>📊</i><p>No test results yet. Execute some tests!</p></div>';
+                    return;
+                }
+                
+                list.innerHTML = data.test_results.map(result => `
+                    <div class="result-item ${result.status}">
+                        <h3>${result.test_name}</h3>
+                        <p>Status: <strong>${result.status.toUpperCase()}</strong> | 
+                           Duration: ${result.duration_seconds}s | 
+                           Date: ${new Date(result.start_time).toLocaleString()}</p>
+                        <button onclick="viewResult('${result.filename}')">View Details</button>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading results:', error);
+            }
+        }
+        
+        async function viewResult(filename) {
+            try {
+                const response = await fetch(`/api/test-result/${filename}`);
+                const data = await response.json();
+                
+                const result = data.result;
+                const details = document.createElement('div');
+                details.className = 'result-details';
+                details.innerHTML = `
+                    <h3>Test Result Details</h3>
+                    <p><strong>Test:</strong> ${result.test_name}</p>
+                    <p><strong>Status:</strong> ${result.status}</p>
+                    <p><strong>Duration:</strong> ${result.duration_seconds} seconds</p>
+                    <h4>Actions:</h4>
+                    ${result.actions_executed.map(action => `
+                        <div class="action-result ${action.success ? 'success' : 'failed'}">
+                            ${action.message}
+                        </div>
+                    `).join('')}
+                `;
+                
+                const modal = document.createElement('div');
+                modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000;';
+                modal.onclick = () => modal.remove();
+                
+                const content = document.createElement('div');
+                content.style.cssText = 'background: white; padding: 30px; border-radius: 10px; max-width: 800px; max-height: 80vh; overflow-y: auto;';
+                content.onclick = (e) => e.stopPropagation();
+                content.appendChild(details);
+                
+                const closeBtn = document.createElement('button');
+                closeBtn.textContent = 'Close';
+                closeBtn.onclick = () => modal.remove();
+                content.appendChild(closeBtn);
+                
+                modal.appendChild(content);
+                document.body.appendChild(modal);
+            } catch (error) {
+                alert('Error viewing result: ' + error.message);
+            }
+        }
+        
+        function showStatus(elementId, message, type) {
+            const statusDiv = document.getElementById(elementId);
+            statusDiv.className = 'status ' + type;
+            statusDiv.textContent = message;
+            statusDiv.style.display = 'block';
+        }
+        
+        // Initialize
+        updateActionForm();
+    </script>
+</body>
+</html>
