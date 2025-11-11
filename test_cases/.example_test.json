@@ -1,0 +1,26 @@
+{
+  "name": "Example Login Test",
+  "start_url": "https://example.com",
+  "actions": [
+    {
+      "type": "navigate",
+      "url": "https://example.com",
+      "timestamp": "2024-01-01T10:00:00.000000"
+    },
+    {
+      "type": "wait",
+      "seconds": 2,
+      "timestamp": "2024-01-01T10:00:01.000000"
+    },
+    {
+      "type": "assertion",
+      "assertion_type": "text",
+      "selector": "h1",
+      "selector_type": "css",
+      "expected_value": "Example Domain",
+      "actual_value": "Example Domain",
+      "timestamp": "2024-01-01T10:00:03.000000"
+    }
+  ],
+  "created_at": "2024-01-01T10:00:00.000000"
+}

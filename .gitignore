@@ -27,6 +27,7 @@ env/
 
 # Test data
 test_cases/*.json
+!test_cases/.example_test.json
 test_results/*.json
 
 # IDE
