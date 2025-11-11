@@ -1,0 +1,52 @@
+{
+  "name": "Form Submission Test",
+  "description": "Fill and submit a contact form",
+  "steps": [
+    {
+      "action": "navigate",
+      "url": "https://example.com/contact"
+    },
+    {
+      "action": "type",
+      "selector": "#name",
+      "selectorType": "id",
+      "value": "John Doe",
+      "tagName": "input"
+    },
+    {
+      "action": "type",
+      "selector": "#email",
+      "selectorType": "id",
+      "value": "john.doe@example.com",
+      "tagName": "input"
+    },
+    {
+      "action": "select",
+      "selector": "#subject",
+      "selectorType": "id",
+      "value": "general-inquiry",
+      "tagName": "select"
+    },
+    {
+      "action": "type",
+      "selector": "#message",
+      "selectorType": "id",
+      "value": "This is a test message from the automation tool.",
+      "tagName": "textarea"
+    },
+    {
+      "action": "check",
+      "selector": "#newsletter",
+      "selectorType": "id",
+      "value": true,
+      "tagName": "input"
+    },
+    {
+      "action": "click",
+      "selector": "button[type='submit']",
+      "selectorType": "css",
+      "tagName": "button",
+      "innerText": "Submit"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "name": "Example Login Test",
+  "description": "Test user login flow with valid credentials",
+  "steps": [
+    {
+      "action": "navigate",
+      "url": "https://example.com/login"
+    },
+    {
+      "action": "type",
+      "selector": "#username",
+      "selectorType": "id",
+      "value": "testuser@example.com",
+      "tagName": "input"
+    },
+    {
+      "action": "type",
+      "selector": "#password",
+      "selectorType": "id",
+      "value": "SecurePassword123",
+      "tagName": "input"
+    },
+    {
+      "action": "click",
+      "selector": "#loginButton",
+      "selectorType": "id",
+      "tagName": "button",
+      "innerText": "Sign In"
+    },
+    {
+      "action": "navigate",
+      "url": "https://example.com/dashboard"
+    }
+  ]
+}

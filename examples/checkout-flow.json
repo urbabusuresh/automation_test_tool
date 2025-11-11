@@ -1,0 +1,72 @@
+{
+  "name": "E-commerce Checkout Flow",
+  "description": "Complete product purchase flow from search to checkout",
+  "steps": [
+    {
+      "action": "navigate",
+      "url": "https://shop.example.com"
+    },
+    {
+      "action": "type",
+      "selector": "[name='search']",
+      "selectorType": "name",
+      "value": "laptop",
+      "tagName": "input"
+    },
+    {
+      "action": "click",
+      "selector": "button.search-button",
+      "selectorType": "css",
+      "tagName": "button",
+      "innerText": "Search"
+    },
+    {
+      "action": "click",
+      "selector": ".product-card:nth-of-type(1) .add-to-cart",
+      "selectorType": "css",
+      "tagName": "button",
+      "innerText": "Add to Cart"
+    },
+    {
+      "action": "click",
+      "selector": "#cart-icon",
+      "selectorType": "id",
+      "tagName": "a"
+    },
+    {
+      "action": "click",
+      "selector": "#checkout-button",
+      "selectorType": "id",
+      "tagName": "button",
+      "innerText": "Proceed to Checkout"
+    },
+    {
+      "action": "type",
+      "selector": "#shipping-address",
+      "selectorType": "id",
+      "value": "123 Main St, City, State 12345",
+      "tagName": "input"
+    },
+    {
+      "action": "select",
+      "selector": "#payment-method",
+      "selectorType": "id",
+      "value": "credit-card",
+      "tagName": "select"
+    },
+    {
+      "action": "check",
+      "selector": "#terms-checkbox",
+      "selectorType": "id",
+      "value": true,
+      "tagName": "input"
+    },
+    {
+      "action": "click",
+      "selector": "#place-order",
+      "selectorType": "id",
+      "tagName": "button",
+      "innerText": "Place Order"
+    }
+  ]
+}
