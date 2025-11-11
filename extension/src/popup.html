@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Automation Recorder</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Automation Recorder</h1>
+    </header>
+
+    <section class="controls">
+      <label for="testName">Test name</label>
+      <input id="testName" type="text" placeholder="My Test" />
+
+      <div class="buttons">
+        <button id="startBtn" class="btn primary">Start</button>
+        <button id="stopBtn" class="btn" disabled>Stop</button>
+        <button id="exportBtn" class="btn" title="Export recording to JSON">Export JSON</button>
+        <button id="createTcBtn" class="btn" title="Generate runnable testcase">Create Testcase</button>
+      </div>
+
+      <div id="status" class="status">Idle</div>
+    </section>
+
+    <section class="preview">
+      <h2>Recording Preview</h2>
+      <div id="recordingSteps" class="steps">
+        <div class="empty">No recording yet. Start recording to capture steps.</div>
+      </div>
+    </section>
+
+    <footer>
+      <small>Tip: Start then interact with the page to record clicks and typing.</small>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
